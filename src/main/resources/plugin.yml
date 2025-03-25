@@ -1,0 +1,23 @@
+name: jjaeMCshop
+version: '1.0-SNAPSHOT'
+main: me.jjae.jjaemcshop.jjshop
+api-version: '1.21'
+commands:
+  상점:
+    description: 상점 관련 기능을 실행합니다.
+    usage: /상점 [생성/수정/목록]
+  상점목록:
+    description: 저장된 상점 목록을 확인합니다.
+    usage: /상점목록
+  상점열기:
+    description: 상점을 엽니다.
+    usage: /상점열기 [상점이름]
+  jjshop:
+    description: jjshop 플러그인의 명령어 목록을 확인합니다.
+    usage: /jjshop help
+  jjshop reload:
+    description: 플러그인을 리로드합니다.
+    usage: /jjshop reload
+  jjshop help:
+    description: 플러그인 도움말을 출력합니다.
+    usage: /jjshop help
