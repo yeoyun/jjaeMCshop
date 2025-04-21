@@ -1,9 +1,17 @@
 package me.jjae.signInputTestPlugin;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.BlockPosition;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class TestSignListener extends PacketAdapter {
 
@@ -14,19 +22,30 @@ public class TestSignListener extends PacketAdapter {
     @Override
     public void onPacketReceiving(PacketEvent event) {
         Player player = event.getPlayer();
-
-        // ✅ 직접 입력한 텍스트 줄 4개 가져오기
+        UUID playerId = player.getUniqueId();
         String[] lines = event.getPacket().getStringArrays().read(0);
+        String input = lines.length > 0 ? lines[0].trim() : "";
 
-        System.out.println("▶ DEBUG: UPDATE_SIGN 패킷 수신됨");
+        // ✅ 정확한 위치에서 제거
+        BlockPosition bp = TestCommand.signLocations.remove(playerId);
+        if (bp != null) {
+            Bukkit.getScheduler().runTask(SignInputTestPlugin.getInstance(), () -> {
+                PacketContainer removeBlock = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
+                removeBlock.getBlockPositionModifier().write(0, bp);
+                removeBlock.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
+                try {
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, removeBlock);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
 
-        if (lines.length > 0) {
-            String input = lines[0].trim(); // 첫 줄만 사용
-            if (!input.isEmpty()) {
-                player.sendMessage("💬 입력한 값: " + input);
-            } else {
-                player.sendMessage("⚠️ 아무것도 입력되지 않았습니다.");
-            }
+        // ✅ 입력 출력
+        if (!input.isEmpty()) {
+            player.sendMessage("입력한 값: " + input);
+        } else {
+            player.sendMessage("⚠️ 아무 것도 입력되지 않았습니다.");
         }
     }
 }
