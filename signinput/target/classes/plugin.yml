@@ -1,0 +1,11 @@
+name: signinput
+version: '1.0-SNAPSHOT'
+main: me.jjae.signinput.Signinput
+api-version: '1.21'
+commands:
+  가격gui:
+    description: 가격 GUI를 엽니다
+    usage: /가격gui
+  가격입력:
+    description: 가격 입력 표지판을 엽니다
+    usage: /가격입력
