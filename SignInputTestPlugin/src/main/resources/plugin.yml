@@ -1,0 +1,7 @@
+name: SignInputTestPlugin
+version: '1.0-SNAPSHOT'
+main: me.jjae.signInputTestPlugin.SignInputTestPlugin
+api-version: '1.21'
+commands:
+  입력테스트:
+    description: 표지판 입력 테스트
